@@ -2,7 +2,9 @@ const port = process.env.PORT || 8000
 const express = require('express')
 const environment =  "production"
 const config = require('./config/config')
-const database = require('./config/database.config')
+require('./config/database.config')({
+  connectionString: process.env.MONGODB_URI
+})
 const app = express()
 
 database(config[environment])
