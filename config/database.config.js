@@ -1,26 +1,22 @@
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 module.exports = function (config) {
     mongoose.connect(config.connectionString, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         ssl: true,
-        tlsAllowInvalidCertificates: true, 
     })
-
-    let database = mongoose.connection
-    database.once('open', (err) => {
-        if (err) {
-            console.log(err)
-            console.log('Connection failed!')
-            return
-        }
-        console.log('✅ Successfully connected to MongoDB Atlas!')
+    .then(() => {
+        console.log('✅ Successfully connected to MongoDB Atlas!');
     })
+    .catch((err) => {
+        console.error('❌ MongoDB connection error:', err);
+    });
 
-    require('../models/Product')
-    require('../models/Category')
-    require('../models/PostCategory')
-    require('../models/User') //.seedAdminUser()
-}
+    // Load models
+    require('../models/Product');
+    require('../models/Category');
+    require('../models/PostCategory');
+    require('../models/User'); //.seedAdminUser()
+};
